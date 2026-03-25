@@ -1,13 +1,13 @@
 package limiter
 
 import (
-	// "encoding/json"
+	// "encoding/json
 	"net/http"
 
 	"golang.org/x/time/rate"
 )
 
-func RateLimiterFromX(next func(w http.ResponseWriter, r *http.Request)) http.Handler {
+func RateLimiterFromXMiddleware(next func(w http.ResponseWriter, r *http.Request)) http.Handler {
 	limiter := rate.NewLimiter(2, 4)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !limiter.Allow() {

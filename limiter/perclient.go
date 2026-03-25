@@ -6,15 +6,13 @@ import (
 	"net/http"
 	"sync"
 	"time"
-
-	"golang.org/x/time/rate"
 )
 
 // func PerClientRateLimiter(next func(w http.ResponseWriter, r *http.Request)) http.Handler {
-func PerClientRateLimiter(next http.HandlerFunc, max, burst int) http.Handler {
+func PerClientRateLimiterMiddleware(next http.HandlerFunc, limiter RateLimiter) http.Handler {
 
 	type Client struct {
-		limiter  *rate.Limiter
+		limiter  RateLimiter
 		lastSeen time.Time
 	}
 
@@ -44,7 +42,7 @@ func PerClientRateLimiter(next http.HandlerFunc, max, burst int) http.Handler {
 
 		mu.Lock()
 		if _, ok := clients[ip]; !ok {
-			clients[ip] = &Client{limiter: rate.NewLimiter(rate.Limit(max), burst)}
+			clients[ip] = &Client{limiter: limiter}
 		}
 		clients[ip].lastSeen = time.Now()
 		mu.Unlock()
