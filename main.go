@@ -30,6 +30,7 @@ func main() {
 	mux := http.DefaultServeMux
 
 	mux.Handle("/ping", limiter.RateLimiterFromX(APIHandler))
+	mux.Handle("/pong", limiter.PerClientRateLimiter(APIHandler))
 	slog.Info("Starting the http server", "Port", "8080")
 
 	err := http.ListenAndServe(":8080", mux)
