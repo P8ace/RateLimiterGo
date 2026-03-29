@@ -40,7 +40,7 @@ func main() {
 	newSlidingWindowLimiter := limiter.NewSlidingWindowLimiter(30, 25)
 	mux.Handle("/foo", limiter.PerClientRateLimiterMiddleware(APIHandler, newSlidingWindowLimiter))
 
-	myTokenBucketLimter := limiter.NewTokenBucketLimiter(2.0, 20)
+	myTokenBucketLimter := limiter.NewTokenBucketLimiter(3.0, 20)
 	mux.Handle("/bar", limiter.PerClientRateLimiterMiddleware(APIHandler, myTokenBucketLimter))
 
 	slog.Info("Starting the http server", "Port", "8080")

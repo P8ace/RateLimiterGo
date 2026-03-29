@@ -16,7 +16,7 @@ type SlidingWindowLimiter struct {
 	window  int64
 	limit   int
 	dequeue *list.List //dequeue - push_back, push_front in O(1) constant time
-	mu      sync.Mutex
+	mu      *sync.Mutex
 }
 
 func NewSlidingWindowLimiter(window int64, limit int) *SlidingWindowLimiter {
@@ -24,6 +24,7 @@ func NewSlidingWindowLimiter(window int64, limit int) *SlidingWindowLimiter {
 		window:  window,
 		limit:   limit,
 		dequeue: list.New(),
+		mu:      new(sync.Mutex),
 	}
 }
 
