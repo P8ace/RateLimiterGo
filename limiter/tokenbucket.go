@@ -14,7 +14,7 @@ type TokenBucketLimiter struct {
 	capacity   uint64    // max no.of tokens that can be held
 	refillRate float64   // rate at which tokens can be refilled
 	lastRefill time.Time // time at which the bucket was refilled
-	mu         sync.Mutex
+	mu         *sync.Mutex
 }
 
 func NewTokenBucketLimiter(refillRate float64, burst uint64) *TokenBucketLimiter {
@@ -23,6 +23,7 @@ func NewTokenBucketLimiter(refillRate float64, burst uint64) *TokenBucketLimiter
 		capacity:   burst,
 		refillRate: refillRate,
 		lastRefill: time.Now(),
+		mu:         new(sync.Mutex),
 	}
 }
 
